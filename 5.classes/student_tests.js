@@ -57,3 +57,71 @@ describe('Домашнее задание к лекции 5 «Классы». Д
     });
   });
 });
+class Student {
+  constructor(name) {
+    this.name = name;
+    this.marks = {}; 
+  }
+
+ 
+  addMark(mark, subject) {
+    if (mark < 2 || mark > 5) {
+      console.log(`Оценка ${mark} некорректна и не будет добавлена.`);
+      return;
+    }
+
+    if (!this.marks[subject]) {
+      this.marks[subject] = []; 
+    }
+
+    this.marks[subject].push(mark); 
+  }
+
+  
+  getAverageBySubject(subject) {
+    if (!this.marks[subject] || this.marks[subject].length === 0) {
+      return 0; 
+    }
+
+    const sum = this.marks[subject].reduce((acc, mark) => acc + mark, 0);
+    return sum / this.marks[subject].length; 
+  }
+
+  
+  getAverage() {
+    const subjects = Object.keys(this.marks);
+    if (subjects.length === 0) {
+      return 0; 
+    }
+
+    const totalSum = subjects.reduce((acc, subject) => acc + this.getAverageBySubject(subject), 0);
+    return totalSum / subjects.length; 
+  }
+}
+const student = new Student("Василиса");
+
+
+student.addMark(4, "физика");
+student.addMark(5, "физика");
+student.addMark(5, "физика");
+student.addMark(4, "физика");
+
+student.addMark(3, "химия");
+student.addMark(4, "химия");
+
+student.addMark(4, "литература");
+
+student.addMark(5, "информатика");
+student.addMark(5, "информатика");
+student.addMark(5, "информатика");
+
+// Попытка добавить некорректную оценку
+student.addMark(6, "математика"); // Оценка не добавится
+
+// Получение средней оценки по предмету
+console.log(student.getAverageBySubject("физика")); // 4.5
+console.log(student.getAverageBySubject("химия")); // 3.5
+console.log(student.getAverageBySubject("математика")); // 0 (такого предмета нет)
+
+// Получение общей средней оценки по всем предметам
+console.log(student.getAverage()); // 4.375
